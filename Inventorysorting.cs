@@ -32,9 +32,23 @@ public partial class InventorySorting: ModInterface
                     break;
                 case CmdId.Event_ChatMessage:
                     ChatInfo ci = (ChatInfo)data;
-                    //TODO
+                    if (ci.msg.StartsWith("s! "))
+                    {
+                        ci.msg = ci.msg.Remove(0, 3);
+                    }
+                    ci.msg = ci.msg.ToLower();
+                    if (ci.msg.StartsWith("/sort"))
+                    {
+                        int id = ci.playerId;
+                        GameAPI.Game_Request(CmdId.Request_Player_GetInventory, (ushort)1, id);
+                        
+                    }
                     break;
-                
+                case CmdId.Event_Player_Inventory:
+                    Inventory inventory = (Inventory) data;
+                    Sort(inventory);
+                    break;
+
                 default:
                     GameAPI.Console_Write($"event: {eventId}");
                     var outmessage = "NO DATA";
@@ -52,6 +66,37 @@ public partial class InventorySorting: ModInterface
             GameAPI.Console_Write(ex.Message);
             GameAPI.Console_Write(ex.ToString());
         }
+    }
+
+    public void Sort(Inventory inventory)
+    {
+        ItemStack[] bag = inventory.bag;
+        int size = bag.Length;
+        for(int i = 1; i < size; ++i)
+        {
+            ItemStack itemStack = bag[i];
+            for(int j = 0; j >= 0; --j)
+            {
+                if (j == 0 || bag[j - 1].id < itemStack.id)
+                {
+                    bag[j] = itemStack;
+                    break;
+                }
+
+                else if (bag[j - 1].id > itemStack.id) bag[j] = bag[j - 1];
+            }
+        }
+
+        GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort)1, new Eleon.Modding.Inventory()
+        {
+            this.playerId = 12345;
+        this.toolbelt = Toolbelt;
+        this.bag = Bag;
+    }
+);
+        
+            
+        
     }
 
     public void Game_Update()
