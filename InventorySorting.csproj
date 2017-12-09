@@ -30,25 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mif">
-      <HintPath>D:\SteamLibrary\steamapps\common\Empyrion - Galactic Survival\Empyrion_Data\Managed\Mif.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>D:\SteamLibrary\steamapps\common\Empyrion - Galactic Survival\Empyrion_Data\Managed\protobuf-net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Inventorysorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Mif">
+      <HintPath>dependencies\Mif.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>dependencies\protobuf-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

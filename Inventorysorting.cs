@@ -13,8 +13,18 @@ public partial class InventorySorting: ModInterface
     public void Game_Start(ModGameAPI dediAPI)
     {
         InventorySorting.GameAPI = dediAPI;
-        
+        LogFile("chat.txt", "Mod Loaded");
         GameAPI.Console_Write("Inventory Sorting Launched! ");
+    }
+
+    private void LogFile(String FileName, String FileData)
+    {
+        if (!System.IO.File.Exists("Content\\Mods\\InventorySorting\\" + FileName))
+        {
+            System.IO.File.Create("Content\\Mods\\InventorySorting\\" + FileName);
+        }
+        string FileData2 = FileData + Environment.NewLine;
+        System.IO.File.AppendAllText("Content\\Mods\\InventorySorting\\" + FileName, FileData2);
     }
 
 
@@ -28,7 +38,7 @@ public partial class InventorySorting: ModInterface
             {
 
                 case CmdId.Event_Player_Connected:
-                    GameAPI.Game_Request(CmdId.Request_Player_Info, (ushort)CmdId.Request_Player_Info, (Id)data);
+                    GameAPI.Console_Write("InventorySorting : player connected! ");
                     break;
                 case CmdId.Event_ChatMessage:
                     ChatInfo ci = (ChatInfo)data;
@@ -86,14 +96,9 @@ public partial class InventorySorting: ModInterface
                 else if (bag[j - 1].id > itemStack.id) bag[j] = bag[j - 1];
             }
         }
+        inventory.bag = bag;
 
-        GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort)1, new Eleon.Modding.Inventory()
-        {
-            this.playerId = 12345;
-        this.toolbelt = Toolbelt;
-        this.bag = Bag;
-    }
-);
+        GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort)1, inventory); 
         
             
         
