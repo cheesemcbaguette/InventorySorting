@@ -50,13 +50,17 @@ public partial class InventorySorting: ModInterface
                     if (ci.msg.StartsWith("/sort"))
                     {
                         int id = ci.playerId;
-                        GameAPI.Game_Request(CmdId.Request_Player_GetInventory, (ushort)1, id);
+                        GameAPI.Game_Request(CmdId.Request_Player_GetInventory, 2015, new Eleon.Modding.Id(id));
                         
                     }
                     break;
                 case CmdId.Event_Player_Inventory:
                     Inventory inventory = (Inventory) data;
-                    Sort(inventory);
+                    if(seqNr == 2015)
+                    {
+                        Sort(inventory);
+                    }
+                    
                     break;
 
                 default:
@@ -80,26 +84,16 @@ public partial class InventorySorting: ModInterface
 
     public void Sort(Inventory inventory)
     {
+        GameAPI.Console_Write("InventorySorting : beginning sorting ");
         ItemStack[] bag = inventory.bag;
-        int size = bag.Length;
-        for(int i = 1; i < size; ++i)
-        {
-            ItemStack itemStack = bag[i];
-            for(int j = 0; j >= 0; --j)
-            {
-                if (j == 0 || bag[j - 1].id < itemStack.id)
-                {
-                    bag[j] = itemStack;
-                    break;
-                }
 
-                else if (bag[j - 1].id > itemStack.id) bag[j] = bag[j - 1];
-            }
-        }
-        inventory.bag = bag;
-
-        GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort)1, inventory); 
+        Array.Sort(bag, delegate (ItemStack stack1, ItemStack stack2) {
+            return stack1.id.CompareTo(stack2.id);
+        });
         
+        inventory.bag = bag;
+        GameAPI.Console_Write("InventorySorting : sorting ended successfully ! ");
+        GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort) 2016, inventory);      
             
         
     }
@@ -111,4 +105,5 @@ public partial class InventorySorting: ModInterface
     public void Game_Exit()
     {
     }
+
 }
