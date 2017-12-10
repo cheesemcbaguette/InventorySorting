@@ -91,6 +91,16 @@ public partial class InventorySorting: ModInterface
         {
             for (int j = 0; j <= i - 1; j++)
             {
+                if (bag[j].id == bag[j + 1].id)
+                {
+                    int sum = bag[j].count + bag[j + 1].count;
+                    if (sum <= 999)
+                    {
+                        bag[j].count = sum;
+                        bag[j + 1] = new ItemStack();
+                    }
+                }
+
                 if (bag[j].id > bag[j + 1].id)
                 {
                     ItemStack highValue = bag[j];
@@ -99,17 +109,7 @@ public partial class InventorySorting: ModInterface
                     bag[j + 1] = highValue;
                 }
 
-                if(bag[j].id == bag[j + 1].id)
-                {
-                    int sum = bag[j].count + bag[j + 1].count;
-                    if(sum <= 999)
-                    {
-                        bag[j].count = sum;
-                        bag[j + 1] = new ItemStack();
-                    }
-
-
-                }
+                
             }
         }
 
