@@ -87,10 +87,32 @@ public partial class InventorySorting: ModInterface
         GameAPI.Console_Write("InventorySorting : beginning sorting ");
         ItemStack[] bag = inventory.bag;
 
-        Array.Sort(bag, delegate (ItemStack stack1, ItemStack stack2) {
-            return stack1.id.CompareTo(stack2.id);
-        });
-        
+        for (int i = bag.Length - 1; i > 0; i--)
+        {
+            for (int j = 0; j <= i - 1; j++)
+            {
+                if (bag[j].id > bag[j + 1].id)
+                {
+                    ItemStack highValue = bag[j];
+
+                    bag[j] = bag[j + 1];
+                    bag[j + 1] = highValue;
+                }
+
+                if(bag[j].id == bag[j + 1].id)
+                {
+                    int sum = bag[j].count + bag[j + 1].count;
+                    if(sum <= 999)
+                    {
+                        bag[j].count = sum;
+                        bag[j + 1] = new ItemStack();
+                    }
+
+
+                }
+            }
+        }
+
         inventory.bag = bag;
         GameAPI.Console_Write("InventorySorting : sorting ended successfully ! ");
         GameAPI.Game_Request(CmdId.Request_Player_SetInventory, (ushort) 2016, inventory);      
