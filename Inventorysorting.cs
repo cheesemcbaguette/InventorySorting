@@ -94,10 +94,16 @@ public partial class InventorySorting: ModInterface
                 if (bag[j].id == bag[j + 1].id)
                 {
                     int sum = bag[j].count + bag[j + 1].count;
-                    if (sum <= 999)
+                    if (sum <= 1000  && bag[j].ammo == 0) //check if the sum doesn't exceed 1000 items and if its not a weapon
                     {
                         bag[j].count = sum;
                         bag[j + 1] = new ItemStack();
+                        --j;
+                    } else if (sum > 1000 && sum < 2000 && bag[j].ammo == 0) //chck if the sum is between 1000 and 2000 and if its not a weapon
+                    {
+                        bag[j].count = 1000;
+                        int remain = sum - 1000;
+                        bag[j + 1].count = remain;
                     }
                 }
 
